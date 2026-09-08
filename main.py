@@ -12,7 +12,7 @@ except Exception as e:
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.title("MasterAI 🤖")
-    st.write("DIBUAT OLEH DEVELOPER JONATHAN KRISTIAN SERGIO MARUT 💻🔥")
+st.write("DIBUAT OLEH DEVELOPER JONATHAN KRISTIAN SERGIO MARUT 💻🔥")
 
 # Input pertanyaan dari user
 pertanyaan = st.text_input("Masukan (Kamu):")
