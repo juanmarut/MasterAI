@@ -12,14 +12,14 @@ except Exception as e:
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.title("MasterAI 🤖")
-st.write("PC ASUS TUF FA506NC MODE ON 💻🔥")
+    st.write("DIBUAT OLEH DEVELOPER JONATHAN KRISTIAN SERGIO MARUT 💻🔥")
 
 # Input pertanyaan dari user
 pertanyaan = st.text_input("Masukan (Kamu):")
 
 if st.button("Kirim ke MasterAI 🚀"):
     if pertanyaan:
-        with st.spinner("MasterAI sedang berpikir..."):
+        with st.spinner("MasterAI sedang berpikir...🦾🧠"):
             try:
                 tanggapan = model.generate_content(pertanyaan)
                 st.success("MasterAI:")
