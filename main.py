@@ -15,7 +15,7 @@ st.title("MasterAI 🤖")
 st.write("DIBUAT OLEH DEVELOPER JONATHAN KRISTIAN SERGIO MARUT 💻🔥")
 
 # Input pertanyaan dari user
-pertanyaan = st.text_input("Masukan (Kamu):")
+pertanyaan = st.text_input("Tanya Apa  Saja!")
 
 if st.button("Kirim ke MasterAI 🚀"):
     if pertanyaan:
