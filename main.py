@@ -1,21 +1,30 @@
 import google.generativeai as genai
-import os
-from dotenv import load_dotenv
+import streamlit as st
 
-# Muat API Key dari file .env
-load_dotenv()
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Mengambil API Key langsung dari kotak Secrets Streamlit Cloud yang sudah kamu isi
+try:
+    API_KEY = st.secrets["KUNCI_API_GOOGLE"]
+    genai.configure(api_key=API_KEY)
+except Exception as e:
+    st.error("Waduh, Kunci API Google belum terpasang di Secrets! 🗿")
 
-# PAKE YG NGEBUT BUAT PC KUAT 🔥
+# Inisialisasi model resmi yang stabil dan cepat
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-print("🔥 MasterAI 2.5-FLASH SIAP! Ketik 'exit' buat keluar 🔥")
-print("PC ASUS TUF FA506NCG MODE ON 💪")
+st.title("MasterAI 🤖")
+st.write("PC ASUS TUF FA506NC MODE ON 💻🔥")
 
-while True:
-    pertanyaan = input("Kamu: ")
-    if pertanyaan.lower() == "exit":
-        print("MasterAI: Oke sampai jumpa!")
-        break
-    response = model.generate_content(pertanyaan)
-    print("MasterAI:", response.text)
+# Input pertanyaan dari user
+pertanyaan = st.text_input("Masukan (Kamu):")
+
+if st.button("Kirim ke MasterAI 🚀"):
+    if pertanyaan:
+        with st.spinner("MasterAI sedang berpikir..."):
+            try:
+                tanggapan = model.generate_content(pertanyaan)
+                st.success("MasterAI:")
+                st.write(tanggapan.text)
+            except Exception as e:
+                st.error(f"Terjadi kesalahan saat memanggil AI: {e}")
+    else:
+        st.warning("Ketik dulu pertanyaannya, Bro! 🗿")
