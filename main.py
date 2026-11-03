@@ -1,83 +1,88 @@
 import streamlit as st
 from groq import Groq
 from datetime import datetime
+import time, uuid
 
-# ===== CONFIG =====
-st.set_page_config(page_title="MasterAI", page_icon="⚫", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="MasterAI White", page_icon="⚫", layout="wide")
 
-DEVELOPER = "Jonathan Kristian Sergio Marut - Juan 15 tahun Maumere"
-DEVELOPER_FULL = "AI ini dibuat oleh developer bernama Jonathan Kristian Sergio Marut! 15 tahun, SMAK St. Maria Monte Carmelo Maumere, panggilan Juan."
+DEVELOPER = "Jonathan Kristian Sergio Marut - Juan Maumere"
+DEVELOPER_FULL = "AI ini dibuat oleh Jonathan Kristian Sergio Marut! 15 tahun, SMAK Monte Carmelo Maumere"
 
 try:
-    GROQ_KEY = st.secrets["GROQ_API_KEY"]
-    client = Groq(api_key=GROQ_KEY)
+    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 except:
-    st.error('❌ Belum ada GROQ_API_KEY di Secrets! Masuk ke Settings -> Secrets -> isi: GROQ_API_KEY = "gsk_..."')
+    st.error('Isi Secrets: GROQ_API_KEY = "gsk_..."')
     st.stop()
 
-# ===== UI FULL WHITE BACKGROUND, BLACK OPSI & TULISAN + BLACK GLOW ALIVE =====
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-.stApp { background: #FFFFFF !important; font-family: 'Inter', sans-serif !important; }
-header {visibility: hidden !important;}
-footer {visibility: hidden !important;}
-
-h1 { color: #000000 !important; text-align: center !important; font-weight: 900 !important; font-size: 2.5rem !important; text-shadow: 0 0 20px rgba(0,0,0,0.2) !important; }
-h2, h3 { color: #000000 !important; }
+.stApp { background: #FFFFFF !important; }
+header, footer {visibility: hidden !important;}
+h1 { color: #000000 !important; text-align: center !important; font-weight: 900 !important; text-shadow: 0 0 20px rgba(0,0,0,0.2) !important; }
 p, span, label, div { color: #000000 !important; }
-
-/* SIDEBAR PUTIH */
-section[data-testid="stSidebar"] { background: #FFFFFF !important; border-right: 2px solid #000000 !important; }
-section[data-testid="stSidebar"] * { color: #000000 !important; }
-
-/* DROPDOWN HITAM + GLOW */
-div[data-testid="stSelectbox"] > div {
-    background: #000000 !important; border: 1px solid #000000 !important; border-radius: 12px !important;
-    box-shadow: 0 0 15px rgba(0,0,0,0.4), 0 0 30px rgba(0,0,0,0.15) !important;
-    transition: all 0.3s ease !important; min-height: 50px !important;
-}
-div[data-testid="stSelectbox"] > div:hover { box-shadow: 0 0 25px rgba(0,0,0,0.7), 0 0 50px rgba(0,0,0,0.3) !important; }
-div[data-testid="stSelectbox"] div, div[data-testid="stSelectbox"] span, div[data-testid="stSelectbox"] p { color: #FFFFFF !important; font-weight: 600 !important; font-size: 14px !important; }
+section[data-testid="stSidebar"] { background: #FFFFFF !important; border-right: 2px solid #000 !important; }
+div[data-testid="stSelectbox"] > div { background: #000000 !important; border-radius: 12px !important; box-shadow: 0 0 15px rgba(0,0,0,0.4) !important; }
+div[data-testid="stSelectbox"] span, div[data-testid="stSelectbox"] p, div[data-testid="stSelectbox"] div { color: #FFFFFF !important; font-weight: 600 !important; }
 div[data-testid="stSelectbox"] svg { fill: #FFFFFF !important; }
-
-/* INFO BAR HITAM GLOW */
-.info-bar {
-    background: #000000 !important; color: #FFFFFF !important; padding: 12px 18px !important;
-    border-radius: 12px !important; font-weight: 700 !important; font-size: 13px !important;
-    text-align: center !important; box-shadow: 0 0 20px rgba(0,0,0,0.4) !important; margin: 12px 0 !important;
-    letter-spacing: 0.5px !important;
-}
-.info-bar span { color: #FFFFFF !important; }
-
-/* CHAT BUBBLE */
-.stChatMessage { background: #F8F8F8 !important; border: 1.5px solid #000000 !important; border-radius: 16px !important; box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important; margin-bottom: 10px !important; }
-.stChatMessage:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important; }
-.stChatMessage p { color: #000000 !important; font-size: 15px !important; line-height: 1.6 !important; }
-
-/* CHAT INPUT HITAM GLOW */
-div[data-testid="stChatInput"] {
-    background: #000000 !important; border-radius: 28px !important; border: 2px solid #000000 !important;
-    box-shadow: 0 0 25px rgba(0,0,0,0.3) !important; padding: 4px !important;
-}
-div[data-testid="stChatInput"] textarea { color: #FFFFFF !important; font-weight: 500 !important; font-size: 15px !important; }
-div[data-testid="stChatInput"] textarea::placeholder { color: #888888 !important; }
-div[data-testid="stChatInput"] button { background: #FFFFFF !important; color: #000000 !important; border-radius: 50% !important; width: 36px !important; height: 36px !important; }
-
-/* BUTTON */
-.stButton > button { background: #000000 !important; color: #FFFFFF !important; border-radius: 10px !important; font-weight: 700 !important; border: 1.5px solid #000000 !important; box-shadow: 0 0 15px rgba(0,0,0,0.2) !important; transition: all 0.2s !important; width: 100% !important; }
-.stButton > button:hover { background: #FFFFFF !important; color: #000000 !important; box-shadow: 0 0 25px rgba(0,0,0,0.4) !important; transform: translateY(-1px) !important; }
-
-/* CHAT HISTORY BUTTON */
-.chat-history-btn { background: #FFFFFF !important; border: 1.5px solid #000000 !important; border-radius: 10px !important; padding: 10px !important; margin: 5px 0 !important; }
+.stChatMessage { background: #F5F5F5 !important; border: 1.5px solid #000 !important; border-radius: 16px !important; }
+div[data-testid="stChatInput"] { background: #000000 !important; border-radius: 28px !important; box-shadow: 0 0 20px rgba(0,0,0,0.3) !important; }
+div[data-testid="stChatInput"] textarea { color: #FFFFFF !important; }
+div[data-testid="stChatInput"] textarea::placeholder { color: #888 !important; }
+div[data-testid="stChatInput"] button { background: #FFF !important; color: #000 !important; border-radius: 50% !important; }
+.stButton > button { background: #000 !important; color: #FFF !important; border-radius: 10px !important; font-weight: 700 !important; width: 100% !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ===== SESSION STATE CHAT HISTORY =====
 if "chats" not in st.session_state:
-    first_id = str(uuid.uuid4())
-    st.session_state.chats = {first_id: {"title": "Ngobrol Baru ✨", "messages": [], "created": time.time()}}
-    st.session_state.active_chat = first_id
+    fid = str(uuid.uuid4())
+    st.session_state.chats = {fid: {"title": "Ngobrol Baru", "messages": [], "created": time.time()}}
+    st.session_state.active_chat = fid
 
-def get_active_chat():
-   
+with st.sidebar:
+    st.markdown("### ⬛ MasterAI")
+    st.write(DEVELOPER)
+    if st.button("➕ Chat Baru"):
+        nid = str(uuid.uuid4())
+        st.session_state.chats[nid] = {"title": "Ngobrol Baru", "messages": [], "created": time.time()}
+        st.session_state.active_chat = nid
+        st.rerun()
+    st.divider()
+    st.write("📜 Riwayat")
+    for cid, cdata in list(st.session_state.chats.items())[::-1]:
+        if st.button(f"💬 {cdata['title'][:18]}", key=f"ch_{cid}"):
+            st.session_state.active_chat = cid
+            st.rerun()
+
+active = st.session_state.chats[st.session_state.active_chat]
+
+st.title("MasterAI")
+st.markdown(f"<div style='text-align:center; font-weight:700;'>DIBUAT OLEH {DEVELOPER.upper()} 💻</div>", unsafe_allow_html=True)
+
+model_pilihan = st.selectbox("Model", ["openai/gpt-oss-120b - GPT-OSS 120B PALING PINTER 🚀", "openai/gpt-oss-20b - GPT-OSS 20B CEPAT ⚡", "openai/gpt-oss-safeguard-20b - VERSI AMAN 🛡️"], label_visibility="collapsed")
+kode_model = model_pilihan.split(" - ")[0].strip()
+
+st.markdown(f"<div style='background:#000; color:#FFF; padding:10px; border-radius:10px; text-align:center; font-weight:700; box-shadow:0 0 20px rgba(0,0,0,0.3);'>⬛ {kode_model} | {datetime.now().strftime('%d %B %Y')}</div>", unsafe_allow_html=True)
+
+for m in active["messages"]:
+    with st.chat_message(m["role"]):
+        st.write(m["content"])
+
+q = st.chat_input(f"Tanya ke {kode_model}")
+
+if q:
+    if len(active["messages"]) == 0:
+        active["title"] = q[:20]
+    active["messages"].append({"role": "user", "content": q})
+    with st.chat_message("user"):
+        st.write(q)
+    with st.chat_message("assistant"):
+        try:
+            if "siapa pembuat" in q.lower() or "siapa yang membuat" in q.lower():
+                ans = DEVELOPER_FULL + " 🔥"
+            else:
+                r = client.chat.completions.create(model=kode_model, messages=[{"role": "system", "content": f"Kamu MasterAI buatan {DEVELOPER_FULL}. Hari ini 2026."}, {"role": "user", "content": q}], max_tokens=1500)
+                ans = r.choices[0].message.content
+            st.write(ans)
+            active["messages"].append({"role": "assistant", "content": ans})
+        except Exception as e:
+            st.error(f"Error: {e}")
