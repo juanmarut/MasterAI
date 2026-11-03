@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 from datetime import datetime
 
-st.set_page_config(page_title="MasterAI - Anti Llama", page_icon="🔥")
+st.set_page_config(page_title="MasterAI 2026 FIXED", page_icon="⚡", layout="wide")
 
 DEVELOPER = "Jonathan Kristian Sergio Marut - Juan 15 tahun Maumere"
 
@@ -12,57 +12,69 @@ except:
     st.error('Isi Secrets: GROQ_API_KEY = "gsk_..."')
     st.stop()
 
-st.title("MasterAI 🤖 Anti-Llama Edition 🔥")
-st.caption("Pilih model selain Llama anjing itu 😹")
+# ===== STYLE BIAR VISUAL TETEP BAGUS KAYAK PUNYA LU =====
+st.markdown("""
+<style>
+.stApp { background: #0A0A12 !important; }
+div[data-testid="stSelectbox"] { background: #1E1E32 !important; border-radius: 12px !important; }
+</style>
+""", unsafe_allow_html=True)
 
-# ===== PILIH MODEL - INI KUNCINYA! =====
+st.title("MasterAI 🤖")
+
+# ===== DROPDOWN VISUAL LU GUE PERTAHANIN! JANGAN HAPUS! =====
 model_pilihan = st.selectbox(
-    "Pilih Otak AI nya:",
+    "qwen-2.5-32b - PINTER KAYAK CHATGPT 🚀",
     [
-        "gemma2-9b-it - PALING STABIL ANTI ERROR ✅",
-        "mixtral-8x7b-32768 - JAGO CODING & MTK 🧠",
-        "qwen-2.5-32b - PINTER KAYAK CHATGPT 🚀",
-        "deepseek-r1-distill-llama-70b - JAGO MIKIR DALEM 🤔",
-        "llama-3.3-70b-versatile - Llama tapi versi dewa (kalo hoki)",
-        "llama3-8b-8192 - Llama jadul tapi abadi"
-    ]
+        "openai/gpt-oss-120b - PINTER KAYAK CHATGPT 🚀 (REKOMENDASI)",
+        "openai/gpt-oss-20b - SUPER CEPAT & STABIL ⚡",
+        "qwen/qwen3-32b - QWEN 3.2 TERBARU 2026 🔥",
+        "allam-2-7b - RINGAN BUAT HP KENTANG 📱",
+        "llama-3.3-70b-versatile - LLAMA VERSI DEWA (Enterprise)"
+    ],
+    label_visibility="collapsed"
 )
 
-# Ambil kode model asli dari pilihan
-kode_model = model_pilihan.split(" - ")[0]
+# Ambil kode model
+kode_model = model_pilihan.split(" - ")[0].strip()
 
-st.write(f"DIBUAT OLEH {DEVELOPER}")
-st.info(f"Model aktif: `{kode_model}` | {datetime.now().strftime('%d %B %Y')}")
+st.markdown(f"DIBUAT OLEH **{DEVELOPER.upper()}** 💻🔥")
+st.markdown(f"<div style='background:#00D4FF; color:#000; padding:8px 14px; border-radius:8px; font-weight:800;'>Model aktif: {kode_model} | {datetime.now().strftime('%d %B %Y')}</div>", unsafe_allow_html=True)
+st.divider()
 
 if "msgs" not in st.session_state:
     st.session_state.msgs = []
 
 for m in st.session_state.msgs:
-    with st.chat_message(m["role"]):
+    with st.chat_message(m["role"], avatar="😊" if m["role"]=="user" else "🤖"):
         st.write(m["content"])
 
 q = st.chat_input(f"Tanya ke {kode_model}")
 
 if q:
     st.session_state.msgs.append({"role": "user", "content": q})
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="😊"):
         st.write(q)
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="🤖"):
         try:
-            if "siapa pembuat" in q.lower():
+            if "siapa pembuat" in q.lower() or "siapa yang membuat" in q.lower():
                 ans = f"Aku dibuat oleh {DEVELOPER}! Bukan Llama anjing itu! 😹🔥"
-                st.write(ans)
             else:
+                # Model baru ini formatnya beda dikit, tapi tetep Groq
                 resp = client.chat.completions.create(
                     model=kode_model,
                     messages=[
-                        {"role": "system", "content": f"Kamu MasterAI buatan {DEVELOPER}. Hari ini 2026. Jangan bilang kamu Llama. Kamu MasterAI."},
+                        {"role": "system", "content": f"Kamu adalah MasterAI, dibuat oleh {DEVELOPER}. Hari ini {datetime.now().strftime('%d %B %Y')} 2026. Jawab bahasa Indonesia gaul."},
                         {"role": "user", "content": q}
-                    ]
+                    ],
+                    max_tokens=1500
                 )
                 ans = resp.choices[0].message.content
-                st.write(ans)
+            st.write(ans)
             st.session_state.msgs.append({"role": "assistant", "content": ans})
         except Exception as e:
-            st.error(f"Error model {kode_model}: {e}")
-            st.warning("Coba pilih model lain di dropdown atas! Gemma2 paling aman!")
+            err = str(e)
+            if "decommissioned" in err or "does not exist" in err:
+                st.error(f"Model {kode_model} udah mati! Pilih yang atas: openai/gpt-oss-120b")
+            else:
+                st.error(f"Error: {err}")
