@@ -3,7 +3,7 @@ import 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
 
 # Mengambil API Key langsung dari kotak Secrets Streamlit Cloud yang sudah kamu isi
 try:
-    API_KEY = st.secrets["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"]
+    API_KEY = st.secrets["API KEY KAMU"]
     genai.configure(api_key=API_KEY)
 except Exception as e:
     st.error("Waduh, Kunci API Google belum terpasang di Secrets! 🗿")
