@@ -139,7 +139,7 @@ for m in st.session_state.msgs:
     with st.chat_message(m["role"], avatar="⚪" if m["role"]=="user" else "⬛"):
         st.write(m["content"])
 
-q = st.chat_input(f"Tanya ke {kode_model}...")
+q = st.chat_input(f"Tanya ke MasterAI...")
 
 if q:
     st.session_state.msgs.append({"role": "user", "content": q})
