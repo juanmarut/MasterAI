@@ -1,9 +1,9 @@
-import google.generativeai as genai
 import streamlit as st
+import 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
 
 # Mengambil API Key langsung dari kotak Secrets Streamlit Cloud yang sudah kamu isi
 try:
-    API_KEY = st.secrets["KUNCI_API_GOOGLE"]
+    API_KEY = st.secrets["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"]
     genai.configure(api_key=API_KEY)
 except Exception as e:
     st.error("Waduh, Kunci API Google belum terpasang di Secrets! 🗿")
