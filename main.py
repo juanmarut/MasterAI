@@ -62,7 +62,7 @@ if st.button("Kirim 🚀"):
                     ans = DEVELOPER_INFO
                 else:
                     res = client.chat.completions.create(
-                        model="model="llama3-8b-8192",
+                        model="model="llama-3.3-70b-versatile",
                         messages=[
                             {"role": "system", "content": f"Kamu MasterAI. {DEVELOPER_INFO}. Hari ini {datetime.now().strftime('%d %B %Y')} 2026. Bahasa gaul."},
                             {"role": "user", "content": pertanyaan}
